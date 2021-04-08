@@ -1,0 +1,116 @@
+name: Build P4Php
+
+env:
+  codeline:       "r20.1"
+
+  # Linux build variables:
+  P4APIDIR:       "${{ github.workspace }}/../p4api:/p4/build/p4api"
+  P4PHPDIR:       "${{ github.workspace }}:/p4/build/p4-php7"
+
+  # Windows build variables:
+  docker:         "ppiorunski/p4php7:server2019-vs2017"
+  phpMount:       "${{ github.workspace }}\\..\\php-src:c:\\dependencies\\php"
+  p4apiMount:     "${{ github.workspace }}\\..\\p4api:c:\\dependencies\\p4api"
+  p4phpBinMount:  "${{ github.workspace }}\\..\\p4-bin:c:\\p4php-bin"
+  phpSdkMount:    "${{ github.workspace }}\\..\\php-sdk-binary-tools:c:\\dependencies\\php-sdk-binary-tools"
+  p4phpMount:     "${{ github.workspace }}:c:\\dependencies\\p4php-source"
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ssl: [1.1.1, 1.0.2]
+        php: [72, 73, 74, 80]
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Login to docker hub
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Get p4api for Openssl ${{ matrix.ssl }}
+      run: |
+        dir
+        pwd
+        cd .. && wget ftp://ftp.perforce.com/perforce/$codeline/bin.linux26x86_64/p4api-glibc2.12-openssl${{ matrix.ssl }}.tgz
+        tar -xvf p4api-glibc2.12-openssl${{ matrix.ssl }}.tgz && rm p4api-glibc2.12-openssl${{ matrix.ssl }}.tgz && mv p4api* p4api && ls -la && cd ${{ github.workspace }} && pwd
+    - name: Get p4 and p4d binary
+      run: |
+        wget ftp://ftp.perforce.com/perforce/$codeline/bin.linux26x86_64/p4 && chmod 775 p4
+        wget ftp://ftp.perforce.com/perforce/$codeline/bin.linux26x86_64/p4d && chmod 775 p4d
+    - name: Build P4Php ${{ matrix.php }} Openssl ${{ matrix.ssl }}
+      run: |
+        docker pull ppiorunski/p4php7:php${{ matrix.php }}-ssl${{ matrix.ssl }}
+        docker run \
+        -v $P4APIDIR \
+        -v $P4PHPDIR \
+        ppiorunski/p4php7:php${{ matrix.php }}-ssl${{ matrix.ssl }}
+        mv modules/perforce.so perforce_php${{ matrix.php }}-ssl${{ matrix.ssl }}.so
+    - uses: actions/upload-artifact@v2
+      with:
+        name: non-production-perforce_php${{ matrix.php }}-ssl${{ matrix.ssl }}.so
+        path: perforce_php${{ matrix.php }}-ssl${{ matrix.ssl }}.so
+
+  build-windows:
+    runs-on: windows-2019
+    strategy:
+      matrix:
+        TS: [TS, NTS]
+        phpMinor: [2, 3, 4]
+        arch: [x86, x64]
+    steps:
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+      with:
+        path: p4php/
+
+    - name: Login to docker hub
+      run: |
+        echo ${{ secrets.DOCKERHUB_TOKEN }}| docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: Get p4api and p4 binary
+      run: |
+        cd ..\
+        $WebClient = New-Object System.Net.WebClient ; $WebClient.DownloadFile("ftp://ftp.perforce.com/perforce/$env:codeline/bin.nt${{ matrix.arch }}/p4api_vs2017_dyn_openssl1.1.1.zip","${{ github.workspace }}\..\p4api.zip")
+        Expand-Archive -Path ${{ github.workspace }}\..\p4api.zip ;  Move-Item -path ${{ github.workspace }}\..\p4api\*\* ${{ github.workspace }}\..\p4api\
+        # 2 ways to get the php src - git clone and sync @tag, or download from website.
+        #$WebClient = New-Object System.Net.WebClient ; $WebClient.DownloadFile("https://codeload.github.com/php/php-src/zip/php-7.4.10","${{ github.workspace }}\..\php-src.zip")
+        #Expand-Archive -Path ${{ github.workspace }}\..\php-src.zip ;  Move-Item -path ${{ github.workspace }}\..\php-src\*\* ${{ github.workspace }}\..\php-src\
+        cd ${{ github.workspace }}\.. ; git clone https://github.com/php/php-src.git ; cd php-src ; git checkout tags/php-7.${{ matrix.phpMinor }}.10
+        $WebClient = New-Object System.Net.WebClient ; $WebClient.DownloadFile("ftp://ftp.perforce.com/perforce/$env:codeline/bin.nt${{ matrix.arch }}/p4.exe","${{ github.workspace }}\..\php-src\p4.exe")
+        $WebClient = New-Object System.Net.WebClient ; $WebClient.DownloadFile("ftp://ftp.perforce.com/perforce/$env:codeline/bin.nt${{ matrix.arch }}/p4d.exe","${{ github.workspace }}\..\php-src\p4d.exe")
+        cd ${{ github.workspace }}\.. ; git clone  https://github.com/microsoft/php-sdk-binary-tools.git ; cd php-sdk-binary-tools ;git checkout tags/php-sdk-2.2.0
+        cd ${{ github.workspace }}\..
+        mkdir ${{ github.workspace }}\..\p4-bin
+        # note to self when dir is changed it stays that way between commands
+    - name: Get docker image
+      run: docker pull $Env:docker
+
+    - name: Build P4Php for php 7.${{ matrix.phpMinor }} and OpenSSL 1.1.1
+      run: |
+        docker run `
+        -v $Env:phpMount `
+        -v $Env:p4phpMount `
+        -v $Env:p4apiMount `
+        -v $Env:p4phpBinMount `
+        -v $Env:phpSdkMount `
+        --env PHP_MINOR_VER=${{ matrix.phpMinor }} --env arch=${{ matrix.arch }} --env TS=${{ matrix.TS }} `
+        $Env:docker
+      #  move ${{ github.workspace }}\..\p4-bin\perforce_php7${{ matrix.phpMinor }}${{ matrix.TS }}.dll ${{ github.workspace }}\perforce_php7${{ matrix.phpMinor }}_${{ matrix.arch }}_${{ matrix.TS }}.dll
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: non-production-perforce_php7${{ matrix.phpMinor }}_${{ matrix.arch }}_${{ matrix.TS }}.dll
+        path: ${{ github.workspace }}\perforce_php7${{ matrix.phpMinor }}_${{ matrix.arch }}_${{ matrix.TS }}.dll

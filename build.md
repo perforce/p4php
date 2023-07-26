@@ -14,7 +14,7 @@
        for the 2023.1 P4PHP.
 
     2. Download the Perforce C++ API from the Perforce FTP site at
-       "ftp://ftp.perforce.com/perforce". The API archive is located
+       "https://ftp.perforce.com/perforce". The API archive is located
        in release and platform-specific subdirectories, choose one
        matching OpenSSL version available at target system and the
        C library, for example p4api-glibc2.12-openssl1.1.1.tgz.

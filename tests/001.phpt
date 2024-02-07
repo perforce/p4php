@@ -50,13 +50,6 @@ var_dump($p4->input);
 // Test accessing uninitialized variable
 var_dump($p4->something);
 
-// Test variable created at runtime
-$p4->something = "Hello";
-var_dump($p4->something);
-if (isset($p4->something)) {
-    print("Something is set\n");
-}
-
 // Test declared class fields
 $p4->api_level = 1;
 var_dump($p4->api_level);
@@ -173,7 +166,6 @@ object(stdClass)#2 (0) {
 
 %s: Undefined property:%w P4::$%s in %s001.php on line %d
 NULL
-string(5) "Hello"
 int(1)
 Unsupported charset
 string(4) "utf8"

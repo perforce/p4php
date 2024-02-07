@@ -1,7 +1,7 @@
                            Release Notes for
                 P4PHP, Perforce's script API for PHP
 
-                            Version 2020.2
+                            Version 2023.2
 
 Introduction
 
@@ -20,99 +20,72 @@ Introduction
 
 --------------------------------------------------------------------------
 
-Unix and Mac: Building the P4PHP Extension
+Installation
+    
+    Unix and Mac: Building the P4PHP Extension
 
-    To build P4PHP, you need the header files and libraries used by
-    PHP and the "phpize" command-line utility. Both of these
-    requirements can be met by installing PHP from source or by
-    installing the development php packages (php-devel) appropriate
-    for your operating system.
+        The official version of P4Python exists as source on:
+        https://github.com/perforce/p4php
 
-    After you have obtained the required files and the phpize utility,
-    perform the following steps:
+        Instructions for building are in the build.md file which can be found
+        here - https://github.com/perforce/p4php/blob/master/build.md
+        
 
-    1. Download the Perforce P4PHP files.
-       ftp://ftp.perforce.com/perforce/r20.2/bin.tools/p4php.tgz
-       for the 2020.2 P4PHP.
+    Windows: Building the P4PHP DLL
 
-    2. Download the Perforce C++ API from the Perforce FTP site at
-       "ftp://ftp.perforce.com/perforce". The API archive is located
-       in release and platform-specific subdirectories, choose one
-       matching OpenSSL version available at target system and the
-       C library, for example p4api-glibc2.12-openssl1.1.1.tgz.
-
-       Note: 32-bit builds of P4PHP require a 32-bit version of the
-             C++ API and a 32-bit version of PHP. 64-bit builds of
-             P4PHP require a 64-bit version of the C++ API and a
-             64-bit version of PHP.
-
-    3. Extract both archives into an empty directory.
-
-    4. To build P4PHP, change to the p4php-<version> directory, and run
-       the following commands:
-
-           phpize
-
-           ./configure --with-perforce=<path to Perforce C++ API>
-
-           make
-
-    5. To test your P4PHP build, run the following command:
-
-           make test
-
-       Note: the test harness requires a copy of the Perforce server
-             executable, p4d, be installed in the current working
-             directory.
-
-    6. To install P4PHP, run the following command:
-
-           make install
-
-       Note: the installation typically needs to be performed as
-             the root user.
-
-    7. To enable P4PHP, edit your "php.ini" file and add the following
-       line:
-
-           extension=perforce.so;
-
-       Note: to locate your "php.ini" file, run the following command:
-
-             php --ini
-
-       Now run:
-
-             php -m
-
-       to confirm that the P4PHP module is being loaded.
-
-    8. To verify that P4PHP works, run the following command:
-
-           php --ri perforce
-
-       If the extension is correctly installed, P4PHP displays
-       its version information.
-
-    SSL support
-    -----------
-
-    Perforce Server 2020.2 supports SSL connections and the C++ API has
-    been compiled with this support. This means that in order to build
-    P4PHP, the underlying PHP framework must include OpenSSL.
+        For instructions how to build P4PHP on windows please contact
+        support@perforce.com
 
 --------------------------------------------------------------------------
 
-Windows: Building the P4PHP DLL
+Compatibility Statements
 
-    For instructions how to build P4PHP on windows please contact support@perforce.com
+    Server Compatibility
 
+        You can use any release of P4PHP with any release of the Perforce server
+        later than 2001.1 but it is recommended to use the 2023.2 release
+
+    API Compatibility
+
+        This release of P4PHP requires the 2023.2 (2023.2/2519561) Perforce API.
+        Older releases will not work and will fail to compile.
+
+    OpenSSL compatibility
+
+        The minimum version of OpenSSL libraries required is driven by the
+        2023.2 server; the minimum version needed is 1.0.2. The latest 3.0.x or
+        1.1.1 patch is recommended.
+
+    PHP compatibility
+
+        This release of P4PHP is compatible with PHP versions: 7.2.x - 8.2.x
+
+    Platform compatibility
+
+        Though P4PHP is generally portable, this release is tested on the
+        following platforms:
+            
+            Linux
+                Ubuntu 16.04, 18.04, 20.04, 22.04
+                CentOS/Rocky Linux 7, 8
+            Windows
+                Server 2016
+
+    Compiler compatibility
+
+        To build P4PHP from source, you must use a version of PHP that has been 
+        compiled with the same compiler used to build the Perforce C++ API. For
+        most platforms, use gcc/g++.
+
+        Attempting to use a different compiler or a different version of the
+        compiler causes linker errors due to differences in name handling.
+        
 --------------------------------------------------------------------------
 
 Testing P4PHP
 
-    You can use the following small script to test P4PHP.  Place it
-    into a file named "p4php_info.php":
+    You can use the following small script to test P4PHP.  Place it into a file
+    named "p4php_info.php":
 
     <?php
     $p4 = new P4();
@@ -164,52 +137,62 @@ Testing P4PHP
 
 --------------------------------------------------------------------------
 
-Compatibility Statements
-
-    Server Compatibility
-
-        You can use any release of P4PHP with any release of the
-        Perforce server later than 2001.1
-
-    API Compatibility
-
-        The 2020.2 release of P4PHP requires the 2020.2 Perforce API.
-        Older releases will not work and will fail to compile.
-
-    OpenSSL compatibility
-
-        The minimum version of OpenSSL libraries required is driven
-        by the 2020.2 server; the minimum version needed is 1.0.2.
-
-    PHP compatibility
-
-        The 2020.2 release of P4PHP is compatible with PHP versions: 7.2.x - 8.0.x
-
-    Platform compatibility
-
-        Though P4PHP is generally portable, this release is certified
-        only on the following platforms:
-
-            Linux 2.6 Intel (x86, x86_64)
-            Windows 10, 2016, 2019
-
-    Compiler compatibility
-
-        To build P4PHP from source, you must use a version of PHP that
-        has been compiled with the same compiler used to build the
-        Perforce C++ API. For most platforms, use gcc/g++.
-
-        Attempting to use a different compiler or a different version
-        of the compiler causes linker errors due to differences in name
-        handling.
-
---------------------------------------------------------------------------
-
 Key to symbols used in change notes below.
 
       * -- requires new P4PHP
      ** -- requires P4PHP built with new P4API
     *** -- requires new p4d server program
+
+--------------------------------------------------------------------------
+
+New functionality in 2023.2 (2023.2/2552260) (2024/02/06)
+
+	#2545331 (Job #119067) * **
+	    This release of P4PHP is built against P4API 2023.2 (2023.2/2519561)
+
+--------------------------------------------------------------------------
+
+New functionality in 2023.1 Patch 1 (2023.1/2541299) (2024/01/12)
+        
+    (Job #118832) * **
+        This release is built against P4API (2023.1/2513900),
+        to address possible vulnerability: CVE-2023-5759.
+
+--------------------------------------------------------------------------
+
+New functionality in 2023.1 (2023.1/2469314) (2023/07/26)
+
+    #2457062 (Job #116145) * **
+        This release is built against latest P4API (2023.1/2442900)
+
+    #2468224, #2460254 (Job #114508) * **
+        Added support for Windows builds for PHP 8.2
+
+--------------------------------------------------------------------------
+
+New functionality in 2022.2 Patch 2 (2022.2/2541286) (2024/01/12)
+        
+    (Job #118832) * **
+        This release is built against P4API (2022.2/2531894),
+        to address possible vulnerability: CVE-2023-5759.
+
+--------------------------------------------------------------------------
+
+New functionality in 2022.2 Patch 1
+
+    #2389314, #2388708 (Job #113738) * **
+        Added support for PHP 8.2
+        
+    (Job #113737) * **
+        This release is built against latest P4API (2022.2/2407422), which 
+        supports OpenSSL3
+
+--------------------------------------------------------------------------
+
+New functionality in 2022.2
+
+    #2371665 (Job #111053) * **
+        Added support for PHP 8.1
 
 --------------------------------------------------------------------------
 

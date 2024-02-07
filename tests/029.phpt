@@ -34,8 +34,7 @@
 
  # Remove depot and stream
  $p4->run("stream", "-d", "//STREAM_TEST/TEST");
- $p4->run("depot", "-d", "STREAM_TEST");
-
+ 
  $p4->disconnect();
 
  ?>

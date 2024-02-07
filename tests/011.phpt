@@ -36,7 +36,7 @@ Array
     [Description] => Created by tester.
 
     [Root] => %sclient-one
-    [Options] => noallwrite noclobber nocompress unlocked nomodtime normdir
+    [Options] => noallwrite noclobber nocompress unlocked nomodtime normdir noaltsync
     [SubmitOptions] => submitunchanged
     [LineEnd] => local
     [View] => Array
@@ -57,7 +57,7 @@ Array
     [Description] => Created by tester.
 
     [Root] => /var/tmp/something
-    [Options] => noallwrite noclobber nocompress unlocked nomodtime normdir
+    [Options] => noallwrite noclobber nocompress unlocked nomodtime normdir noaltsync
     [SubmitOptions] => submitunchanged
     [LineEnd] => local
     [View] => Array

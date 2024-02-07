@@ -12,6 +12,9 @@ $map = new P4_Map(array(
     "//depot/main/...   //client/...",
     "-//depot/main/something/... -//client/something/..."
 ));
+for ($i = 1; $i < $LIMIT; $i++) {
+    $map->insert("//depot/main/${i}/... //client/${i}/...");
+}
 
 // Control test - true
 $ep = "//depot/main/...";
@@ -33,9 +36,18 @@ var_dump($map->includes($gp));
 $hp = $map;
 var_dump($map->includes($hp));
 
-// Use NULL/Empty as a key, not a string, but it parses as one and should return false.
+// Use NULL as a key, not a string, but it parses as one and should return false.
 $ip = NULL;
-var_dump($map->includes($ip ?? ''));
+var_dump($map->includes($ip));
+
+// Backtrack, testing every single key we inserted.  Should be true.
+for ($i = $LIMIT; $i > 1; $i--) {
+    $ip = $map->includes("//depot/main/${i}/...");
+    if ($ip == false) {
+        break;
+    }
+}
+var_dump($ip);
 
 --EXPECTF--
 bool(true)
@@ -44,3 +56,4 @@ NULL
 bool(false)
 NULL
 bool(false)
+bool(true)

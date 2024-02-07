@@ -634,7 +634,7 @@ PHP_METHOD(P4, run)
                     cmdString << " " << Z_LVAL(args[i]);
                     break;
                 case IS_DOUBLE:
-                    cmdString << " " << static_cast<P4INT64>(Z_DVAL(args[i]));
+                    cmdString << " " << Z_DVAL(args[i]);
                     break;
                 case IS_TRUE:
                     cmdString << " " << "TRUE";

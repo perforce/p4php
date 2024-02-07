@@ -13,7 +13,6 @@ if (PHP_PERFORCE != "no") {
         CHECK_LIB("libsupp.lib",   "perforce", PHP_PERFORCE) &&
         CHECK_LIB("libeay32.lib",  "perforce", PHP_PERFORCE) &&
         CHECK_LIB("ssleay32.lib",  "perforce", PHP_PERFORCE) &&
-        CHECK_LIB("Crypt32.lib",  "perforce", PHP_PERFORCE) &&
 	//CHECK_LIB("advapi32.lib",  "perforce") &&
 	//CHECK_LIB("oldnames.lib",  "perforce") &&
 	//CHECK_LIB("kernel32.lib",  "perforce") &&

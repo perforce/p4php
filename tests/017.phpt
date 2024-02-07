@@ -60,7 +60,7 @@ stat report array(12) {
   ["Owner"]=>
   string(6) "tester"
   ["Options"]=>
-  string(68) "noallwrite noclobber nocompress unlocked nomodtime normdir noaltsync"
+  string(58) "noallwrite noclobber nocompress unlocked nomodtime normdir"
   ["SubmitOptions"]=>
   string(15) "submitunchanged"
   ["LineEnd"]=>
@@ -87,7 +87,7 @@ stat report array(12) {
   ["Owner"]=>
   string(6) "tester"
   ["Options"]=>
-  string(68) "noallwrite noclobber nocompress unlocked nomodtime normdir noaltsync"
+  string(58) "noallwrite noclobber nocompress unlocked nomodtime normdir"
   ["SubmitOptions"]=>
   string(15) "submitunchanged"
   ["LineEnd"]=>

@@ -34,8 +34,8 @@ if (PHP_PERFORCE != "no") {
             }
 
             /* copy Version from p4 source if it exists */
-            if (FSO.FileExists(PHP_PERFORCE + "\\sample\\Version")) {
-                FSO.CopyFile(PHP_PERFORCE + "\\sample\\Version", p4phpPath + "\\Version");
+            if (FSO.FileExists(PHP_PERFORCE + "\\..\\p4php-source\\p4php\\Version")) {
+                FSO.CopyFile(PHP_PERFORCE + "\\..\\p4php-source\\p4php\\Version", p4phpPath + "\\Version");
             }
 
             /* verify we have a Version file to work with */

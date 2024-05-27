@@ -1,7 +1,7 @@
                            Release Notes for
                 P4PHP, Perforce's script API for PHP
 
-                            Version 2023.2
+                            Version 2024.1
 
 Introduction
 
@@ -17,6 +17,20 @@ Introduction
     To determine the version of your P4PHP, run the following command:
 
     php --ri perforce
+
+--------------------------------------------------------------------------
+
+Important End-of-Life Notice
+
+    We have removed support of Centos 7 & Ubuntu 16.04 from P4Perl 2024.1.
+
+    This major release of P4PHP would be the last to test against 
+
+        Ubuntu 18.04
+        PHP version 7.2.x - 8.0.x
+
+    which are in EOL status. This is part of our commitment to 
+    focus on supported technology platforms
 
 --------------------------------------------------------------------------
 
@@ -43,22 +57,22 @@ Compatibility Statements
     Server Compatibility
 
         You can use any release of P4PHP with any release of the Perforce server
-        later than 2001.1 but it is recommended to use the 2023.2 release
+        later than 2001.1 but it is recommended to use the 2024.1 release
 
     API Compatibility
 
-        This release of P4PHP requires the 2023.2 (2023.2/2519561) Perforce API.
+        This release of P4PHP requires the 2024.1 (2024.1/2596294) Perforce API.
         Older releases will not work and will fail to compile.
 
     OpenSSL compatibility
 
         The minimum version of OpenSSL libraries required is driven by the
-        2023.2 server; the minimum version needed is 1.0.2. The latest 3.0.x or
+        2024.1 server; the minimum version needed is 1.1.1. The latest 3.0.x or
         1.1.1 patch is recommended.
 
     PHP compatibility
 
-        This release of P4PHP is compatible with PHP versions: 7.2.x - 8.2.x
+        This release of P4PHP is compatible with PHP versions: 7.2.x - 8.3.x
 
     Platform compatibility
 
@@ -66,8 +80,8 @@ Compatibility Statements
         following platforms:
             
             Linux
-                Ubuntu 16.04, 18.04, 20.04, 22.04
-                CentOS/Rocky Linux 7, 8
+                Ubuntu 18.04, 20.04, 22.04
+                Rocky Linux 8
             Windows
                 Server 2016
 
@@ -142,6 +156,29 @@ Key to symbols used in change notes below.
       * -- requires new P4PHP
      ** -- requires P4PHP built with new P4API
     *** -- requires new p4d server program
+
+--------------------------------------------------------------------------
+
+New functionality in 2024.1 (2024.1/2601561) (2024/05/22)
+
+    #2599291 (Job #120163) * ** ***
+        This release of P4PHP is built against P4API 2024.1 (2024.1/2596294)
+        
+    #2585123 (Job #119913) * **
+        Added support for PHP 8.3
+
+Bugs fixed in 2024.1 (2024.1/2601561) (2024/05/22)
+
+    #2588747 (Job #119723) * **
+        Fixed version mismatch issue in the output of identify() method 
+        when running with windows DLL
+
+--------------------------------------------------------------------------
+
+New functionality in 2023.2 Patch 1 (2023.2/2568001) (2024/03/07)
+
+	(Job #119717) * **
+	    This release of P4PHP is built against P4API 2023.2 Patch 3 (2023.2/2563409)
 
 --------------------------------------------------------------------------
 

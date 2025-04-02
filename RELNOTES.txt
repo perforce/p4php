@@ -58,7 +58,7 @@ Compatibility Statements
 
     PHP compatibility
 
-        This release of P4PHP is compatible with PHP versions: 8.1.x - 8.3.x
+        This release of P4PHP is compatible with PHP versions: 8.1.x - 8.4.x
 
     Platform compatibility
 
@@ -145,6 +145,13 @@ Key to symbols used in change notes below.
       * -- requires new P4PHP
      ** -- requires P4PHP built with new P4API
     *** -- requires new p4d server program
+
+--------------------------------------------------------------------------
+
+New functionality in 2024.2 Patch 1 (2024.2/2720535) (2025/02/13)
+
+    #2685350 (Job #123452) * **
+        Added support for PHP 8.4
 
 --------------------------------------------------------------------------
 

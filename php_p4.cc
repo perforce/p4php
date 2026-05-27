@@ -222,48 +222,6 @@ static void p4_object_destroy(zend_object *object TSRMLS_DC)
     zend_objects_destroy_object(object);
 }
 
-/* create_object handler for P4 class. */
-zend_object * p4_create_object(zend_class_entry *type TSRMLS_DC)
-{
-    p4_object *obj = (p4_object *) ecalloc(1, sizeof(struct p4_object) + zend_object_properties_size(type));
-
-    zend_object_std_init(&obj->std, type TSRMLS_CC);
-
-    obj->std.handlers = &p4_object_handlers;
-
-    return &obj->std;
-}
-
-/* Register the P4 Class. */
-void register_p4_class(INIT_FUNC_ARGS)
-{
-    zend_class_entry ce;
-
-    INIT_CLASS_ENTRY(ce, "P4", perforce_p4_functions);
-    p4_ce = zend_register_internal_class(&ce TSRMLS_CC);
-
-    p4_ce->create_object = p4_create_object;
-    memcpy(&p4_object_handlers, zend_get_std_object_handlers(),
-        sizeof(zend_object_handlers));
-
-    p4_object_handlers.clone_obj = NULL;
-    p4_object_handlers.offset = XtOffsetOf(struct p4_object, std);
-    p4_object_handlers.free_obj = p4_object_free_storage;
-    p4_object_handlers.dtor_obj = p4_object_destroy;
-}
-
-/* Fetch the PHPClientAPI instance used by this instance from the pool. */
-PHPClientAPI *get_client_api(zval *this_ptr)
-{
-    p4_object *obj = Z_P4_OBJ_P(this_ptr);
-
-    // protect against null client
-    if (obj->client == NULL) {
-        zend_error(E_ERROR, "Cannot get perforce client api instance");
-    }
-
-    return obj->client;
-}
 
 /* {{{ proto void P4::__construct()
     Constructor: Initialize certain fields. */

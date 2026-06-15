@@ -52,6 +52,7 @@ if (PHP_PERFORCE != "no") {
                 ADD_FLAG("CFLAGS_PERFORCE", "/DCASE_INSENSITIVE");
 				ADD_FLAG("LDFLAGS_PERFORCE", "/NODEFAULTLIB:msvcrtd");
 				ADD_FLAG("LDFLAGS_PERFORCE", "/FORCE:MULTIPLE");
+				ADD_FLAG("LDFLAGS_PERFORCE", "iphlpapi.lib");
 
 
                 /* get information about p4api version */

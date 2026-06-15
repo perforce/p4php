@@ -7,6 +7,8 @@ define('CLIENT_TWO_ROOT', getcwd() . DIRECTORY_SEPARATOR . 'client-two');
 define('CLIENT_ONE_NAME', 'test-client-1');
 define('CLIENT_TWO_NAME', 'test-client-2');
 
+define('SUPER_PASSWORD', 'P4PHP!Super1');
+
 function whichP4d()
 {
     // locate p4d binary

@@ -1013,7 +1013,14 @@ PHP_METHOD(P4, run_password)
     params[0] = param0;
 
     array_init(&input);
-    add_next_index_zval(&input, oldpass);
+    /* On a fresh server "Secure By Default" there is no
+     * existing password, so 'p4 passwd' prompts only for the new password and
+     * its confirmation -- not the old password. 
+     * When oldpass is empty send [newpass, newpass]; otherwise send
+     * [oldpass, newpass, newpass]. */
+    if (Z_TYPE_P(oldpass) == IS_STRING && Z_STRLEN_P(oldpass) > 0) {
+        add_next_index_zval(&input, oldpass);
+    }
     add_next_index_zval(&input, newpass);
     add_next_index_zval(&input, newpass);
 

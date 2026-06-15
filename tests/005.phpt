@@ -12,21 +12,25 @@ requireP4d();
 include 'connect.inc';
 
 // test that run_login and run('login') are the same
-$results = $p4->run_login("testing123");
+$results = $p4->run_login(SUPER_PASSWORD);
 var_dump($results);
-$p4->input = "testing123";
+$p4->input = SUPER_PASSWORD;
 $results2 = $p4->run("login");
 var_dump($results2);
 
 // test that run_password and run('passwd') are the same
-$results = $p4->run_password("testing123", "testing321");
+$results = $p4->run_password(SUPER_PASSWORD, "P4Test!Pwd99");
 var_dump($results);
-$p4->input = array("testing321", "testing123", "testing123");
+$p4->password = 'P4Test!Pwd99';
+$p4->run_login('P4Test!Pwd99');
+$p4->input = array("P4Test!Pwd99", SUPER_PASSWORD, SUPER_PASSWORD);
 $results2 = $p4->run("passwd");
 var_dump($results2);
+$p4->password = SUPER_PASSWORD;
+$p4->run_login(SUPER_PASSWORD);
 
 // test that logging in still works
-$results = $p4->run_login("testing123");
+$results = $p4->run_login(SUPER_PASSWORD);
 var_dump($results);
 
 // add some files so that we can test various file related commands
